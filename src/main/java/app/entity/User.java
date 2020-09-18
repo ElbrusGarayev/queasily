@@ -2,24 +2,27 @@ package app.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private long id;
 
     private String name;
 
-    private String username;
-
+    @Column(unique = true)
     private String email;
 
     private String password;
+
+    @OneToOne(mappedBy = "user")
+    private Point point;
+
+    private boolean isEnabled;
 }

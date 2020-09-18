@@ -24,10 +24,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http
                 .formLogin()
-                .loginPage("/user/login")
+                .loginPage("/login")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/user/login");
+                .logoutSuccessUrl("/login");
     }
 
     @Bean

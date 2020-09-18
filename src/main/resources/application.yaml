@@ -3,13 +3,16 @@ server:
 
 spring:
   datasource:
-    url: ${JDBC_DATABASE_URL}
+#    url: ${JDBC_DATABASE_URL}
+#    username: ${JDBC_DATABASE_USERNAME}
+#    password: ${JDBC_DATABASE_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/queasily
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
   mail:
     host: smtp.gmail.com
@@ -22,11 +25,3 @@ spring:
           auth: true
           starttls:
             enable: true
-  liquibase:
-    enabled: false
-    change-log: classpath:/db/changelog/master.yaml
-
-cloudinary:
-  cloud_name: ${CLOUDINARY_NAME}
-  api_key: ${CLOUDINARY_KEY}
-  api_secret: ${CLOUDINARY_SECRET}
