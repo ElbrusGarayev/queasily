@@ -2,7 +2,7 @@ package app.controller;
 
 import app.entity.User;
 import app.mail.service.EMailSender;
-import app.repository.ConfirmationTokenRepository;
+import app.service.ConfirmationTokenService;
 import app.service.UserService;
 import app.token.ConfirmationToken;
 import app.validation.FormUser;
@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Controller
@@ -24,7 +25,9 @@ public class RegisterController {
     private final UserService userService;
     private final EMailSender mailSender;
     private final PasswordEncoder encoder;
-    private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final ConfirmationTokenService confirmationTokenService;
+
+    private static String email;
 
     @GetMapping("register")
     ModelAndView handle(User user){
@@ -45,11 +48,13 @@ public class RegisterController {
                 userService.save(user);
 
                 ConfirmationToken confirmationToken = new ConfirmationToken(user);
-                confirmationTokenRepository.save(confirmationToken);
+                confirmationTokenService.save(confirmationToken);
+
+                email = user.getEmail();
 
                 String mailContent = "To confirm your account, please click here : "
                         +"http://localhost:5000/confirm-account?token=" + confirmationToken.getConfirmationToken();
-                mailSender.sendMail(user.getEmail(), mailContent);
+                mailSender.sendMail(email, mailContent);
                 return "redirect:/confirm";
             }
         }
@@ -58,17 +63,17 @@ public class RegisterController {
 
     @GetMapping("confirm")
     ModelAndView handleConfirm(){
-        return new ModelAndView("confirm");
+        ModelAndView mav = new ModelAndView("confirm");
+        mav.addObject("email", email);
+        return mav;
     }
 
-    @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
-    public RedirectView confirmUserAccount(@RequestParam("token")String confirmationToken)
-    {
-        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken).get();
-
-        if(token != null)
+    @GetMapping("confirm-account")
+    RedirectView confirmUserAccount(@RequestParam("token") String token){
+        Optional<ConfirmationToken> confirmationToken = confirmationTokenService.findToken(token);
+        if(confirmationToken.isPresent())
         {
-            User user = userService.findByEmail(token.getUser().getEmail());
+            User user = userService.findByEmail(confirmationToken.get().getUser().getEmail());
             user.setEnabled(true);
             userService.save(user);
             return new RedirectView("/login");

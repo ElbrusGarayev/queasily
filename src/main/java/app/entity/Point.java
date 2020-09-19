@@ -12,6 +12,7 @@ public class Point {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(columnDefinition = "integer default 0")
     private int point;
 
     @OneToOne

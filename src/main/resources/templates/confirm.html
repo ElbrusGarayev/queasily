@@ -4,8 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration Success</title>
+    <link rel="stylesheet" href="/css/confirm.css">
 </head>
 <body>
-    <span>A verification email has been sent to your email!</span>
+    <span th:text="'A verification email has been sent to ' + ${email}"></span>
+    <br>
+    <a href="/login">Sign in</a>
 </body>
 </html>

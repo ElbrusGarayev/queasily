@@ -15,10 +15,25 @@
     <link rel="stylesheet"
       href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
 
-</head>
-<body>
+    <style>
+        #main{
+            display: none;
+        }
+    </style>
 
-    <div class="main">
+</head>
+<body onload="myFunction()" style="margin:0;">
+
+<div class="loader_bg" id="loader">
+    <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+    <div class="main" id="main">
 
         <!-- Sing in  Form -->
         <section class="sign-in">
@@ -26,7 +41,7 @@
                 <div class="signin-content">
                     <div class="signin-image">
                         <figure><img src="/images/signin-image.jpg" alt="sing up image"></figure>
-                        <a href="/register" class="signup-image-link">Create an account</a>
+                        <a href="/register" class="signup-image-link">Create an account.</a>
                     </div>
 
                     <div class="signin-form">
@@ -62,5 +77,18 @@
 
     <!-- JS -->
     <script src="/js/login-and-register-main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    var myVar;
+
+    function myFunction() {
+        myVar = setTimeout(showPage, 1500);
+    }
+
+    function showPage() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("main").style.display = "table";
+    }
+</script>
 </body>
 </html>
